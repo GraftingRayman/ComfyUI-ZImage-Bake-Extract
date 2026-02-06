@@ -16,6 +16,8 @@ Duplicate Protection: Automatic filename management to prevent overwriting
 
 <img width="1024" height="816" alt="image" src="https://github.com/user-attachments/assets/4f0727b9-2932-4c33-9917-a3852ea6eed6" />
 
+PROMPT: A close-up portrait of a young woman with a neutral expression, looking directly at the camera with a slight smile. she has long, wavy, dark brown hair and large, expressive brown eyes. her hair is styled in loose waves and falls down her back, framing her face. she is wearing a red sweater and gold earrings, which add a touch of elegance to her overall look. the background is blurred, focusing attention on her face and upper body, with a soft, warm color palette that complements her natural beauty. the lighting is soft and natural, highlighting her features and creating a serene atmosphere. the image has a high-quality, professional look with a focus on natural beauty and elegance.
+
 
 <img width="2691" height="784" alt="image" src="https://github.com/user-attachments/assets/1637a050-9830-4d36-b644-ec580f92a872" />
 
