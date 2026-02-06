@@ -14,6 +14,9 @@ Rank Control: Specify rank during LoRA extraction
 
 Duplicate Protection: Automatic filename management to prevent overwriting
 
+<img width="1024" height="816" alt="image" src="https://github.com/user-attachments/assets/4f0727b9-2932-4c33-9917-a3852ea6eed6" />
+
+
 # Installation
 Place the zimagebakeloraadvanced.py and __init__.py files in your ComfyUI custom nodes directory:
 
