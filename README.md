@@ -17,6 +17,10 @@ Duplicate Protection: Automatic filename management to prevent overwriting
 <img width="1024" height="816" alt="image" src="https://github.com/user-attachments/assets/4f0727b9-2932-4c33-9917-a3852ea6eed6" />
 
 
+<img width="2691" height="784" alt="image" src="https://github.com/user-attachments/assets/1637a050-9830-4d36-b644-ec580f92a872" />
+
+
+
 # Installation
 Place the zimagebakeloraadvanced.py and __init__.py files in your ComfyUI custom nodes directory:
 
