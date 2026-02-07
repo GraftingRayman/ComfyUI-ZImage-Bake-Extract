@@ -41,15 +41,15 @@ Restart ComfyUI or refresh your browser
 
 # Usage
 ## Inputs
-Parameter	Type	Description	Required For
-mode	dropdown	Operation mode: "bake" or "extract"	Always
-base_model	dropdown	Base model selection (from models/diffusion_models/)	Both modes
-output_name	string	Name for the output file (without extension)	Always
-rank	integer	Rank for LoRA extraction (1-32, default: 4)	Extract only
-alpha	float	Strength multiplier for baking/extraction (0.0-2.0, default: 1.0)	Both modes
-lora_model	dropdown	LoRA to bake (from models/loras/)	Bake only
-merged_model	dropdown	Merged/finetuned model for extraction (from models/diffusion_models/)	Extract only
-convert_to_comfy_format	boolean	Convert extracted LoRA to ComfyUI format (default: True)	Extract only
+Parameter	              Type	    Description	                                                            Required For
+mode	                  dropdown	Operation mode: "bake" or "extract"	                                    Always
+base_model	            dropdown	Base model selection (from models/diffusion_models/)	                  Both modes
+output_name	            string	  Name for the output file (without extension)	                          Always
+rank	                  integer	  Rank for LoRA extraction (1-32, default: 4)	                            Extract only
+alpha	                  float	    Strength multiplier for baking/extraction (0.0-2.0, default: 1.0)	      Both modes
+lora_model	            dropdown	LoRA to bake (from models/loras/)	                                      Bake only
+merged_model	          dropdown	Merged/finetuned model for extraction (from models/diffusion_models/)	  Extract only
+convert_to_comfy_format	boolean	  Convert extracted LoRA to ComfyUI format (default: True)	              Extract only
 
 ## Outputs
 Output	Type	Description
