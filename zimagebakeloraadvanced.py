@@ -25,7 +25,7 @@ class ZImageLoraManagerAdvanced:
             return sorted(safetensors_files)
         
         # Get base ComfyUI directory
-        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         
         # Define paths
         model_base_path = os.path.join(base_dir, "models", "diffusion_models")
@@ -874,7 +874,7 @@ class ZImageLoraManagerAdvanced:
         """Main processing function"""
         
         # Get base ComfyUI directory
-        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         
         # Define paths
         model_base_path = os.path.join(base_dir, "models", "diffusion_models")
@@ -950,4 +950,5 @@ NODE_CLASS_MAPPINGS = {
 NODE_DISPLAY_NAME_MAPPINGS = {
     "ZImageLoRA Manager Advanced": "ZImage LoRA Manager Advanced (Bake/Extract)"
 }
+
 
