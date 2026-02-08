@@ -1,5 +1,5 @@
-Currently the node works if its copied to the custom-nodes folder instead of the ComfyUI-ZImage-Bake-Extract folder
-Working on getting it fixed
+# Updates
+08/02/2026 - Fixed models not found when run from within its own directory
 
 
 # ZImage LoRA Manager Advanced
