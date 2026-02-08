@@ -41,3 +41,6 @@ ComfyUI/custom_nodes/zimage_lora_manager/
 └── zimagebakeloraadvanced.py
 
 Restart ComfyUI or refresh your browser
+
+# Output
+All output is to the ComfyUI output folder
