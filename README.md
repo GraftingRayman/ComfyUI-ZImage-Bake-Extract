@@ -1,3 +1,7 @@
+Currently the node works if its copied to the custom-nodes folder instead of the ComfyUI-ZImage-Bake-Extract folder
+Working on getting it fixed
+
+
 # ZImage LoRA Manager Advanced
 A ComfyUI custom node for baking LoRAs into base models and extracting LoRAs from merged/finetuned models. This node provides advanced functionality for managing LoRA weights with support for format conversion between sd-scripts and ComfyUI formats.
 
