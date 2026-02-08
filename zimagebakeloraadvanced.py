@@ -50,8 +50,8 @@ class ZImageLoraManagerAdvanced:
                 "mode": (["bake", "extract"], {"default": "bake"}),
                 "base_model": (["None"] + model_files, {"default": "None"}),
                 "output_name": ("STRING", {"default": "output"}),
-                "rank": ("INT", {"default": 4, "min": 1, "max": 32, "step": 1}),
-                "alpha": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 2.0, "step": 0.01}),
+                "rank": ("INT", {"default": 16, "min": 1, "max": 128, "step": 1}),
+                "alpha": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 10.0, "step": 0.01}),
             },
             "optional": {
                 "lora_model": (["None"] + lora_files, {"default": "None"}),
@@ -950,3 +950,4 @@ NODE_CLASS_MAPPINGS = {
 NODE_DISPLAY_NAME_MAPPINGS = {
     "ZImageLoRA Manager Advanced": "ZImage LoRA Manager Advanced (Bake/Extract)"
 }
+
