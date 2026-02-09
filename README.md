@@ -1,4 +1,6 @@
 # Updates
+09/02/2023 - Node to merge Z-Image LoRA's added
+
 08/02/2026 - Fixed models not found when run from within its own directory
 
 
