@@ -1,4 +1,9 @@
 # __init__.py
-from .zimagebakeloraadvanced import NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS
+from .zimagebakeloraadvanced import NODE_CLASS_MAPPINGS as MAP1, NODE_DISPLAY_NAME_MAPPINGS as DISP1
+from .zimagemerge import NODE_CLASS_MAPPINGS as MAP2, NODE_DISPLAY_NAME_MAPPINGS as DISP2
+
+# Merge the dictionaries
+NODE_CLASS_MAPPINGS = {**MAP1, **MAP2}
+NODE_DISPLAY_NAME_MAPPINGS = {**DISP1, **DISP2}
 
 __all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS']
