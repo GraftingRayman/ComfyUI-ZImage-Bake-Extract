@@ -43,20 +43,12 @@ class ZImageLoraMergerAdvanced:
                 "output_name": ("STRING", {"default": "merged_lora"}),
                 "auto_normalize": ("BOOLEAN", {"default": True}),
                 "output_rank": ("INT", {"default": 16, "min": 1, "max": 128, "step": 1}),
-            },
-            "optional": {
                 "lora1": (["None"] + lora_files, {"default": "None"}),
                 "weight1": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 10.0, "step": 0.01}),
                 "lora2": (["None"] + lora_files, {"default": "None"}),
                 "weight2": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 10.0, "step": 0.01}),
-                "lora3": (["None"] + lora_files, {"default": "None"}),
-                "weight3": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 10.0, "step": 0.01}),
-                "lora4": (["None"] + lora_files, {"default": "None"}),
-                "weight4": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 10.0, "step": 0.01}),
-                "lora5": (["None"] + lora_files, {"default": "None"}),
-                "weight5": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 10.0, "step": 0.01}),
-                "lora6": (["None"] + lora_files, {"default": "None"}),
-                "weight6": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 10.0, "step": 0.01}),
+            },
+            "optional": {
                 "convert_to_comfy_format": ("BOOLEAN", {"default": True}),
             }
         }
@@ -362,12 +354,7 @@ class ZImageLoraMergerAdvanced:
         return merged.contiguous()
     
     def merge_loras(self, output_name, auto_normalize, output_rank,
-                   lora1="None", weight1=1.0,
-                   lora2="None", weight2=1.0,
-                   lora3="None", weight3=1.0,
-                   lora4="None", weight4=1.0,
-                   lora5="None", weight5=1.0,
-                   lora6="None", weight6=1.0,
+                   lora1, weight1, lora2, weight2,
                    convert_to_comfy_format=True):
         
         messages = []
@@ -376,7 +363,7 @@ class ZImageLoraMergerAdvanced:
             # Log start
             start_time = time.time()
             self.log("=" * 60)
-            self.log("STARTING LoRA MERGING")
+            self.log("STARTING LoRA MERGING (2 LoRAs)")
             self.log("=" * 60)
             
             # Get base ComfyUI directory
@@ -387,33 +374,20 @@ class ZImageLoraMergerAdvanced:
             # Create output directory if it doesn't exist
             os.makedirs(output_base_path, exist_ok=True)
             
-            # Collect LoRAs and weights
-            lora_configs = [
-                (lora1, weight1),
-                (lora2, weight2),
-                (lora3, weight3),
-                (lora4, weight4),
-                (lora5, weight5),
-                (lora6, weight6),
-            ]
-            
-            # Filter out "None" LoRAs
-            active_loras = []
-            active_weights = []
-            
-            for lora_name, weight in lora_configs:
-                if lora_name != "None":
-                    active_loras.append(lora_name)
-                    active_weights.append(weight)
-            
-            if len(active_loras) == 0:
+            # Check if both LoRAs are selected
+            if lora1 == "None" and lora2 == "None":
                 return ("❌ Please select at least one LoRA to merge.",)
             
-            if len(active_loras) == 1:
-                return ("ℹ️ Only one LoRA selected. Nothing to merge.",)
+            if lora1 == "None" or lora2 == "None":
+                return ("❌ Please select both LoRAs to merge.",)
             
-            self.log(f"Merging {len(active_loras)} LoRAs")
-            self.log(f"Weights: {active_weights}")
+            # Collect LoRAs and weights
+            active_loras = [lora1, lora2]
+            active_weights = [weight1, weight2]
+            
+            self.log(f"Merging 2 LoRAs")
+            self.log(f"LoRA 1: {os.path.basename(lora1)} (weight: {weight1})")
+            self.log(f"LoRA 2: {os.path.basename(lora2)} (weight: {weight2})")
             self.log(f"Output rank: {output_rank}")
             self.log(f"Auto normalize: {auto_normalize}")
             
@@ -425,9 +399,9 @@ class ZImageLoraMergerAdvanced:
                     self.log(f"Normalized weights: {[f'{w:.3f}' for w in active_weights]}")
                 else:
                     self.log("⚠️ All weights are zero, using equal weights")
-                    active_weights = [1.0 / len(active_loras)] * len(active_loras)
+                    active_weights = [0.5, 0.5]
             
-            # Load all LoRAs
+            # Load both LoRAs
             loaded_loras = []
             lora_paths = []
             
@@ -449,7 +423,7 @@ class ZImageLoraMergerAdvanced:
                 else:
                     converted_loras.append(lora_weights)
             
-            # Get all unique keys from all LoRAs
+            # Get all unique keys from both LoRAs
             all_keys = set()
             for lora_weights in converted_loras:
                 all_keys.update(lora_weights.keys())
@@ -468,7 +442,7 @@ class ZImageLoraMergerAdvanced:
             self.log("Processing alpha values...")
             alpha_count = 0
             for key in alpha_keys:
-                # Collect alphas from all LoRAs that have this key
+                # Collect alphas from both LoRAs that have this key
                 alphas = []
                 for lora_weights in converted_loras:
                     if key in lora_weights:
@@ -487,7 +461,7 @@ class ZImageLoraMergerAdvanced:
             self.log("Processing lora_down weights...")
             down_count = 0
             for key in down_keys:
-                # Collect tensors from all LoRAs that have this key
+                # Collect tensors from both LoRAs that have this key
                 tensors = []
                 tensor_weights = []
                 
@@ -496,10 +470,29 @@ class ZImageLoraMergerAdvanced:
                         tensors.append(lora_weights[key].float())
                         tensor_weights.append(active_weights[i])
                 
-                if len(tensors) > 0:
+                if len(tensors) == 2:  # Both LoRAs have this key
                     # Merge tensors with different ranks
                     merged_tensor = self.merge_different_ranks(tensors, tensor_weights, output_rank)
                     merged_lora[key] = merged_tensor
+                    down_count += 1
+                elif len(tensors) == 1:  # Only one LoRA has this key
+                    # Use the single tensor, adjusted for output rank if needed
+                    single_tensor = tensors[0]
+                    if output_rank != single_tensor.shape[1]:
+                        U, S, Vh = torch.linalg.svd(single_tensor.float(), full_matrices=False)
+                        if output_rank < len(S):
+                            U_k = U[:, :output_rank]
+                            S_k = S[:output_rank]
+                            Vh_k = Vh[:output_rank, :]
+                            merged_tensor = (U_k @ torch.diag(S_k)) @ Vh_k
+                        else:
+                            pad_size = output_rank - single_tensor.shape[1]
+                            merged_tensor = torch.cat([single_tensor, torch.zeros(single_tensor.shape[0], pad_size, 
+                                                                              dtype=single_tensor.dtype, 
+                                                                              device=single_tensor.device)], dim=1)
+                        merged_lora[key] = merged_tensor.contiguous()
+                    else:
+                        merged_lora[key] = single_tensor.contiguous()
                     down_count += 1
             
             self.log(f"✓ Processed {down_count} lora_down weights")
@@ -508,7 +501,7 @@ class ZImageLoraMergerAdvanced:
             self.log("Processing lora_up weights...")
             up_count = 0
             for key in up_keys:
-                # Collect tensors from all LoRAs that have this key
+                # Collect tensors from both LoRAs that have this key
                 tensors = []
                 tensor_weights = []
                 
@@ -517,10 +510,29 @@ class ZImageLoraMergerAdvanced:
                         tensors.append(lora_weights[key].float())
                         tensor_weights.append(active_weights[i])
                 
-                if len(tensors) > 0:
+                if len(tensors) == 2:  # Both LoRAs have this key
                     # Merge tensors with different ranks
                     merged_tensor = self.merge_different_ranks(tensors, tensor_weights, output_rank)
                     merged_lora[key] = merged_tensor
+                    up_count += 1
+                elif len(tensors) == 1:  # Only one LoRA has this key
+                    # Use the single tensor, adjusted for output rank if needed
+                    single_tensor = tensors[0]
+                    if output_rank != single_tensor.shape[1]:
+                        U, S, Vh = torch.linalg.svd(single_tensor.float(), full_matrices=False)
+                        if output_rank < len(S):
+                            U_k = U[:, :output_rank]
+                            S_k = S[:output_rank]
+                            Vh_k = Vh[:output_rank, :]
+                            merged_tensor = (U_k @ torch.diag(S_k)) @ Vh_k
+                        else:
+                            pad_size = output_rank - single_tensor.shape[1]
+                            merged_tensor = torch.cat([single_tensor, torch.zeros(single_tensor.shape[0], pad_size, 
+                                                                              dtype=single_tensor.dtype, 
+                                                                              device=single_tensor.device)], dim=1)
+                        merged_lora[key] = merged_tensor.contiguous()
+                    else:
+                        merged_lora[key] = single_tensor.contiguous()
                     up_count += 1
             
             self.log(f"✓ Processed {up_count} lora_up weights")
@@ -554,12 +566,12 @@ class ZImageLoraMergerAdvanced:
             self.log("MERGE COMPLETE")
             self.log("=" * 60)
             self.log(f"✓ Time taken: {duration:.2f} seconds")
-            self.log(f"✓ LoRAs merged: {len(active_loras)}")
+            self.log(f"✓ LoRAs merged: 2")
             self.log(f"✓ Output rank: {output_rank}")
             self.log(f"✓ Parameters: {len(merged_lora)}")
             self.log(f"✓ Saved to: {os.path.basename(output_path)}")
             
-            messages.append(f"✅ Successfully merged {len(active_loras)} LoRAs")
+            messages.append(f"✅ Successfully merged 2 LoRAs")
             messages.append(f"Time taken: {duration:.2f} seconds")
             messages.append(f"Output rank: {output_rank}")
             messages.append(f"Total parameters: {len(merged_lora)}")
@@ -582,5 +594,5 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "ZImageLoraMergerAdvanced": "ZImage LoRA Merger Advanced (Multi-LoRA)"
+    "ZImageLoraMergerAdvanced": "ZImage LoRA Merger (2 LoRAs)"
 }
