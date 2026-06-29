@@ -1,3 +1,10 @@
+Welcome to my git
+
+If you would like to support me in any way, anything helps
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)]([https://ko-fi.com/J5N221K0D5](https://ko-fi.com/graftingrayman))
+
+
 # Updates
 09/02/2023 - Node to merge Z-Image LoRA's added
 
